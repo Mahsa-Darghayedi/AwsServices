@@ -25,6 +25,14 @@ internal class CustomerRepository : ICustomerRepository
         return result > 0;
     }
 
+    public async Task<CustomerModel?> GetAsync(int id)
+    {
+        var connection =await GetConnection();
+        CustomerModel? model = await connection.QueryFirstOrDefaultAsync<CustomerModel>(@"select * from Customers where Id = @ID", new { ID = id });
+        return model;
+    }
+    
+
     public async Task<bool> IsEmailValid(string email)
     {
         var connection = await  GetConnection();

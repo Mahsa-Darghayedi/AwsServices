@@ -21,4 +21,13 @@ public class CustomersController : ControllerBase
     {
         return Ok(await _customerService.CreateAsync(request));
     }
+
+    [HttpGet("GetCustomer")]
+    public async Task<IActionResult> Get(int id)
+    {
+      var dto = await _customerService.GetAsync(id);
+        if (dto == null)
+            return NotFound();
+        return Ok(dto);
+    }
 }

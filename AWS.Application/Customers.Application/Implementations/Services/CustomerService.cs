@@ -1,10 +1,11 @@
 
-﻿using Customers.Application.Domain.Contracts.Messaging;
+using Customers.Application.Domain.Contracts.Messaging;
 using Customers.Application.Domain.Contracts.Repositories;
 using Customers.Application.Domain.Contracts.Services;
 using Customers.Application.Domain.DTOs.Mapping;
 using Customers.Application.Domain.DTOs.Messages;
 using Customers.Application.Domain.DTOs.Requests.CustomerRequest;
+using Customers.Application.Domain.DTOs.Responses;
 using Customers.Application.Domain.Entities;
 using Customers.Application.Domain.Exceptions;
 using System;
@@ -57,5 +58,14 @@ internal class CustomerService : ICustomerService
     public Task<bool> DeleteAsync(Guid id)
     {
         throw new NotImplementedException();
+    }
+
+    public async Task<CustomerResponseDto?> GetAsync(int id)
+    {
+        CustomerModel? model = await _customerRepository.GetAsync(id);
+        if (model == null)
+            return null;
+
+        return model.ToCustomerResponseDto();
     }
 }

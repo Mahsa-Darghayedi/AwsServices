@@ -1,4 +1,5 @@
 ﻿using Customers.Application.Domain.DTOs.Messages;
+using Customers.Application.Domain.DTOs.Responses;
 using Customers.Application.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -20,4 +21,15 @@ public static class Mapper
             FullName = model.FullName,
             DateOfBirth = model.DateOfBirth
         };
+
+
+    public static CustomerResponseDto ToCustomerResponseDto(this CustomerModel model)
+      => new()
+      {
+          Id = model.Id,
+          UserName = model.UserName,
+          Email = model.Email,
+          FullName = model.FullName,
+          DateOfBirth = model.DateOfBirth
+      };
 }
