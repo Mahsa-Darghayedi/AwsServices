@@ -31,6 +31,13 @@ public class DuplicateItemException : ApplicationException
         StatusCode = HttpStatusCode.BadRequest;
         Message = $"The {propName ?? "Property "} is duplicate.";
     }
+}
 
 
+public class OperationFaildException : ApplicationException {
+    public OperationFaildException()
+    {
+        StatusCode= HttpStatusCode.InternalServerError;
+        Message = "Operation failed.";
+    }
 }

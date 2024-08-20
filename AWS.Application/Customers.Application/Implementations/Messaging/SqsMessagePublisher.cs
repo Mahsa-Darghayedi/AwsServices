@@ -22,7 +22,7 @@ internal class SqsMessagePublisher : ISqsMessagePublisher
     }
     public async Task<SendMessageResponse> SendMessageAsync<T>(T message)
     {
-        var queueUrl = ""; //await GetUrl();
+        var queueUrl = await GetUrl();
         var sendMessage = new SendMessageRequest()
         {
             QueueUrl = queueUrl,

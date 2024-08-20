@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Implementations\Messaging\SqsMessagePublisher.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AWSSDK.SQS" Version="3.7.400.7" />
     <PackageReference Include="Dapper" Version="2.1.35" />
     <PackageReference Include="FluentValidation" Version="11.9.2" />

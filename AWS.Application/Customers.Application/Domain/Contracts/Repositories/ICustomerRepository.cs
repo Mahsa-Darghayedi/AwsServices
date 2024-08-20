@@ -14,4 +14,7 @@ public interface ICustomerRepository
     Task<bool> IsUserNameValid(string userName);
     Task<bool> IsEmailValid(string email);
     Task<CustomerModel?> GetAsync(int id);
+    Task<IReadOnlyCollection<CustomerModel>> GetAllAsync();
+    Task<bool> UpdateAsync(CustomerModel model);
+    Task<bool> DeleteAsync(int id);
 }

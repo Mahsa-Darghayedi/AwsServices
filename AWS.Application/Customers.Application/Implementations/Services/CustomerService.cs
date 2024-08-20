@@ -5,17 +5,10 @@ using Customers.Application.Domain.Contracts.Services;
 using Customers.Application.Domain.DTOs.Mapping;
 using Customers.Application.Domain.DTOs.Messages;
 using Customers.Application.Domain.DTOs.Requests.CustomerRequest;
+using Customers.Application.Domain.DTOs.Requests.CustomerUpdate;
 using Customers.Application.Domain.DTOs.Responses;
 using Customers.Application.Domain.Entities;
 using Customers.Application.Domain.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Data;
-
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Customers.Application.Implementations.Services;
 
 internal class CustomerService : ICustomerService
@@ -47,6 +40,8 @@ internal class CustomerService : ICustomerService
             DateOfBirth = customer.DateOfBirth,
         };
         var response = await _customerRepository.CreateAsync(model);
+        new OperationFaildException().ThrowIf(!response);
+
         if (response)
         {
             CustomerCreated createdDto = model.ToCustomerCreatedMessage();
@@ -55,9 +50,23 @@ internal class CustomerService : ICustomerService
         return response;
     }
 
-    public Task<bool> DeleteAsync(Guid id)
+    public async Task<bool> DeleteAsync(int id)
     {
-        throw new NotImplementedException();
+        var result = await _customerRepository.DeleteAsync(id);
+        new OperationFaildException().ThrowIf(!result);
+        await _messagePublisher.SendMessageAsync(new CustomerDeleted() { Id = id });
+        return result;
+
+    }
+
+
+    public async Task<IReadOnlyCollection<CustomerResponseDto>> GetAllAsync()
+    {
+        var models = await _customerRepository.GetAllAsync();
+        if (models == null)
+            return new List<CustomerResponseDto>().AsReadOnly();
+
+        return models.ToCustomerResponseDto();
     }
 
     public async Task<CustomerResponseDto?> GetAsync(int id)
@@ -65,6 +74,18 @@ internal class CustomerService : ICustomerService
         CustomerModel? model = await _customerRepository.GetAsync(id);
         if (model == null)
             return null;
+
+        return model.ToCustomerResponseDto();
+    }
+
+    public async Task<CustomerResponseDto> UpdateCustomer(CustomerUpdateDto dto)
+    {
+        var model = dto.ToCustomerModel();
+        bool result = await _customerRepository.UpdateAsync(model);
+        new OperationFaildException().ThrowIf(!result);
+
+        CustomerUpdated createdDto = model.ToCustomerUpdatedMessage();
+        await _messagePublisher.SendMessageAsync(createdDto);
 
         return model.ToCustomerResponseDto();
     }

@@ -362,3 +362,4 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /AWS.Api/Customers.Api/customers.db
+/AWS.Application/Customers.Application/Implementations/Messaging/SqsMessagePublisher-local.cs
