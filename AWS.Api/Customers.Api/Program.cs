@@ -1,14 +1,29 @@
+using Amazon.SQS;
 using Customers.Api.Middlewars;
+using Customers.Api.Services;
+using Customers.Api.SqsPublisher.Messaging;
 using Customers.Application.DatabaseContext;
+using Customers.Application.Domain.Contracts.Messaging;
+using Customers.Application.Domain.Contracts.Services;
 using Customers.Application.Extensions;
 using Customers.Application.Implementations.Messaging;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddFluentValidationAutoValidation();
+
+
+
+builder.Services.AddSingleton<ICustomerService, CustomerService>();
+builder.Services.AddSingleton<ISqsMessagePublisher, SqsMessagePublisher>();
+builder.Services.Configure<QueueSetting>(builder.Configuration.GetSection(QueueSetting.Key));
+builder.Services.AddSingleton<IAmazonSQS, AmazonSQSClient>();
+
+
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>

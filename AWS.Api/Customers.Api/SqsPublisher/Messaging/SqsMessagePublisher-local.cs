@@ -1,5 +1,6 @@
 ﻿using Amazon.SQS;
 using Amazon.SQS.Model;
+using Customers.Api.SqsPublisher.Messaging;
 using Customers.Application.Domain.Contracts.Messaging;
 using Microsoft.Extensions.Options;
 using System;
@@ -13,16 +14,16 @@ namespace Customers.Application.Implementations.Messaging;
 
 internal class SqsMessagePublisher : ISqsMessagePublisher
 {
-    private readonly IAmazonSQS _amazonSQS;
+    //private readonly IAmazonSQS _amazonSQS;
     private readonly IOptions<QueueSetting> _queueSetting;
-    public SqsMessagePublisher(IOptions<QueueSetting> queueSetting, IAmazonSQS amazonSQS)
+    public SqsMessagePublisher(IOptions<QueueSetting> queueSetting/*, IAmazonSQS amazonSQS*/)
     {
         _queueSetting = queueSetting;
-        _amazonSQS = amazonSQS;
+        //_amazonSQS = amazonSQS;
     }
     public async Task<SendMessageResponse> SendMessageAsync<T>(T message)
     {
-        var queueUrl = await GetUrl();
+        var queueUrl = ""; 
         var sendMessage = new SendMessageRequest()
         {
             QueueUrl = queueUrl,
@@ -37,12 +38,13 @@ internal class SqsMessagePublisher : ISqsMessagePublisher
                 }
             }
         };
-        return await _amazonSQS.SendMessageAsync(sendMessage);
+        return new SendMessageResponse();
+       // return await _amazonSQS.SendMessageAsync(sendMessage);
     }
 
-    private async Task<string> GetUrl()
-    {
-        var queueUrlResponse = await _amazonSQS.GetQueueUrlAsync(_queueSetting.Value.Name);
-        return queueUrlResponse.QueueUrl;
-    }
+    //private async Task<string> GetUrl()
+    //{
+    //    var queueUrlResponse = await _amazonSQS.GetQueueUrlAsync(_queueSetting.Value.Name);
+    //    return queueUrlResponse.QueueUrl;
+    //}
 }

@@ -1,4 +1,3 @@
-
 using Customers.Application.Domain.Contracts.Messaging;
 using Customers.Application.Domain.Contracts.Repositories;
 using Customers.Application.Domain.Contracts.Services;
@@ -9,7 +8,7 @@ using Customers.Application.Domain.DTOs.Requests.CustomerUpdate;
 using Customers.Application.Domain.DTOs.Responses;
 using Customers.Application.Domain.Entities;
 using Customers.Application.Domain.Exceptions;
-namespace Customers.Application.Implementations.Services;
+namespace Customers.Api.Services;
 
 internal class CustomerService : ICustomerService
 {

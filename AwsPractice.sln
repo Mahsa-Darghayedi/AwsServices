@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Customers.Api", "AWS.Api\Cu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Customers.Application", "AWS.Application\Customers.Application\Customers.Application.csproj", "{9676245B-3F5B-47D9-A427-B6597E83E1F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Customers.Consumer", "Customers.Consumer\Customers.Consumer.csproj", "{1BE66926-51DD-42E4-B700-530F7678A6FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Customers.Consumer", "Customers.Consumer\Customers.Consumer.csproj", "{1BE66926-51DD-42E4-B700-530F7678A6FB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Customers.SNS", "Customers.SNS\Customers.SNS.csproj", "{C8755784-7974-4B88-901C-263F54AB3F32}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{1BE66926-51DD-42E4-B700-530F7678A6FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1BE66926-51DD-42E4-B700-530F7678A6FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1BE66926-51DD-42E4-B700-530F7678A6FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8755784-7974-4B88-901C-263F54AB3F32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8755784-7974-4B88-901C-263F54AB3F32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8755784-7974-4B88-901C-263F54AB3F32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8755784-7974-4B88-901C-263F54AB3F32}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

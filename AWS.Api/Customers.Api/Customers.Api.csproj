@@ -14,6 +14,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="SqsPublisher\Messaging\SqsMessagePublisher-local.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Customers.Api.http" />
   </ItemGroup>
 

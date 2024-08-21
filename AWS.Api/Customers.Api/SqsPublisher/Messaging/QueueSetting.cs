@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Customers.Application.Implementations.Messaging;
+namespace Customers.Api.SqsPublisher.Messaging;
 
 public class QueueSetting
 {
