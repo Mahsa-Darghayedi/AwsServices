@@ -55,7 +55,7 @@ internal class CustomerRepository : ICustomerRepository
         return models.ToList().AsReadOnly();
     }
 
-    public async Task<bool> UpdateAsync(CustomerModel model)
+    public async Task<bool> UpdateAsync(CustomerModel model, DateTime requestedUpdateTime = default)
     {
         var connection = await GetConnection();
         var result = await connection.ExecuteAsync(@"update Customers set UserName = @UserName, FullName = @FullName, Email = @Email, DateOfBirth = @DateOfBirth where Id = @Id", model);

@@ -15,6 +15,6 @@ public interface ICustomerRepository
     Task<bool> IsEmailValid(string email);
     Task<CustomerModel?> GetAsync(int id);
     Task<IReadOnlyCollection<CustomerModel>> GetAllAsync();
-    Task<bool> UpdateAsync(CustomerModel model);
+    Task<bool> UpdateAsync(CustomerModel model, DateTime requestedUpdateTime = default);
     Task<bool> DeleteAsync(int id);
 }

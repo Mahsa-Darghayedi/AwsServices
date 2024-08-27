@@ -64,8 +64,9 @@ internal class CustomerService : ICustomerService
 
     public async Task<CustomerResponseDto> UpdateCustomer(CustomerUpdateDto dto)
     {
-        var model = dto.ToCustomerModel();
-        bool result = await _customerRepository.UpdateAsync(model);
+        var requestedUpdateTime = DateTime.UtcNow;
+        var model = dto.ToCustomerModel();       
+        bool result = await _customerRepository.UpdateAsync(model, requestedUpdateTime);
         new OperationFaildException().ThrowIf(!result);
         return model.ToCustomerResponseDto();
     }

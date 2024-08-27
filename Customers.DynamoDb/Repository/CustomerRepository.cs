@@ -1,6 +1,7 @@
 ﻿using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.DynamoDBv2.Model;
+using Amazon.Runtime.Internal.Transform;
 using Customers.Application.Domain.Contracts.Repositories;
 using Customers.Application.Domain.Entities;
 using System.Net;
@@ -25,7 +26,8 @@ public class CustomerRepository : ICustomerRepository
         PutItemRequest putItem = new()
         {
             TableName = _tableName,
-            Item = customerAttribute
+            Item = customerAttribute,
+            ConditionExpression = "attribute_not_exists(pk) and attribute_not_exisis(sk)"
         };
         var response = await _dynamoDB.PutItemAsync(putItem);
         return response.HttpStatusCode == HttpStatusCode.OK;
@@ -80,7 +82,7 @@ public class CustomerRepository : ICustomerRepository
         throw new NotImplementedException();
     }
 
-    public async Task<bool> UpdateAsync(CustomerModel model)
+    public async Task<bool> UpdateAsync(CustomerModel model, DateTime requestedUpdateTime)
     {
         model.UpdatedAt = DateTime.UtcNow;
         var cusomerAsJson = JsonSerializer.Serialize(model);
@@ -90,6 +92,10 @@ public class CustomerRepository : ICustomerRepository
         {
             TableName = _tableName,
             Item = customerAttribute,
+            ConditionExpression = "UpdatedAt < :requestedUpdateTime",
+            ExpressionAttributeValues = new Dictionary<string, AttributeValue> {
+                { ":requestedUpdateTime", new AttributeValue { S = requestedUpdateTime.ToString("O") } }
+            }
         };
 
         var response = await _dynamoDB.PutItemAsync(updatedItemRequest);
@@ -109,5 +115,30 @@ public class CustomerRepository : ICustomerRepository
             var json = Document.FromAttributeMap(c).ToJson();
             return JsonSerializer.Deserialize<CustomerModel>(json);
         }).ToList().AsReadOnly() ?? Enumerable.Empty<CustomerModel?>().ToList().AsReadOnly();
+    }
+
+
+    public async Task<bool> CreateBulkAsync(List<CustomerModel> customerModels)
+    {
+
+        TransactWriteItemsRequest transactionRequest = new()
+        {
+            TransactItems = customerModels.Select(m => new TransactWriteItem()
+            {
+                Put = new Put()
+                {
+
+                    TableName = _tableName,
+                    Item = Document.FromJson(JsonSerializer.Serialize(m)).ToAttributeMap()
+                },
+                ConditionCheck = new ConditionCheck()
+                {
+                    ConditionExpression = "attribute_not_exisis(pk) and attribute_not_exisis(sk)"
+                }
+
+            }).ToList()
+        };
+        var response = await _dynamoDB.TransactWriteItemsAsync(transactionRequest);
+        return response != null;
     }
 }
